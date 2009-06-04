@@ -1,6 +1,10 @@
 default:
   :name: default name
   :port: 5000
-  
+  :email:
+    :delivery_method: smtp
+    :port: 25
 test:
   :port: 5001
+  :email:
+    :port: 999

@@ -43,18 +43,32 @@ module Settingslogic
       else
         raise ArgumentError.new("Your settings must be a hash, a symbol representing the name of the .yml file in your config directory, or a string representing the abosolute path to your settings file.")
       end
-      
+        
       # load defaults
       default_key = ["defaults", :defaults, "default", :default].find{ |k| self.keys.include?(k) }
-      self.update self[default_key] if default_key
+      self.deep_update self[default_key] if default_key
       
       if defined?(RAILS_ENV)
         rails_env = self.keys.include?(RAILS_ENV) ? RAILS_ENV : RAILS_ENV.to_sym
-        self.update self[rails_env] if self[rails_env]
+        self.deep_update self[rails_env] if self[rails_env]
       end
       define_settings!
     end
     
+    def deep_update(other)
+      other.each_pair do |k,v|
+        if self[k].respond_to?(:update) and other[k].respond_to?(:update)
+          self[k].deep_update(other[k])
+        else
+          self[k] = if other[k].respond_to?(:update)
+            self.class.new(other[k])
+          else
+            other[k]
+          end
+        end
+      end
+    end
+        
     private
       def method_missing(name, *args, &block)
         raise NoMethodError.new("no configuration was specified for #{name}")

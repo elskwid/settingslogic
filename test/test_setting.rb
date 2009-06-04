@@ -76,6 +76,11 @@ class TestSetting < Test::Unit::TestCase
       assert_equal 5001, settings5.port
       assert_equal "default name", settings5.name
       
+      # nested settings
+      assert_equal 25, settings5.default.email.port      
+      assert_equal 999, settings5.email.port      
+      assert_equal "smtp", settings5.default.email.delivery_method
+      assert_equal "smtp", settings5.email.delivery_method      
     end
   end
   

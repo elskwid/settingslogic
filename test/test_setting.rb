@@ -49,6 +49,15 @@ class TestSetting < Test::Unit::TestCase
     end
   end
   
+  def test_environment_specific_nested_settings
+    in_test_environment do
+      settings1 = Settings.new(File.dirname(__FILE__) + '/application3.yml')
+      assert_equal "test_specific", settings1.silly
+      assert_equal "BenJohnson", settings1.neat.cool.awesome
+      assert_equal "Bruce Lee", settings1.neat.cool.really_awesome
+    end
+  end
+    
   def test_environment_specific_settings_when_initialized_with_hash
     in_test_environment do
       settings1 = Settings.new(

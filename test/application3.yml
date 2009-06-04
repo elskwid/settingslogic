@@ -7,3 +7,6 @@ fun: <%= 5 * 5 %>
 
 test:
   silly: "test_specific"
+  neat:
+    cool:
+      really_awesome: Bruce Lee

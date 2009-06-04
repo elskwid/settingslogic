@@ -35,11 +35,11 @@ module Settingslogic
     def initialize(name_or_hash = Config.settings_file)
       case name_or_hash
       when Hash
-        self.update name_or_hash
+        self.deep_update name_or_hash
       when String, Symbol
         root_path = defined?(RAILS_ROOT) ? "#{RAILS_ROOT}/config/" : ""
         file_path = name_or_hash.is_a?(Symbol) ? "#{root_path}#{name_or_hash}.yml" : name_or_hash
-        self.update YAML.load(ERB.new(File.read(file_path)).result).to_hash
+        self.deep_update YAML.load(ERB.new(File.read(file_path)).result).to_hash
       else
         raise ArgumentError.new("Your settings must be a hash, a symbol representing the name of the .yml file in your config directory, or a string representing the abosolute path to your settings file.")
       end
@@ -47,7 +47,7 @@ module Settingslogic
       # load defaults
       default_key = ["defaults", :defaults, "default", :default].find{ |k| self.keys.include?(k) }
       self.deep_update self[default_key] if default_key
-      
+
       if defined?(RAILS_ENV)
         rails_env = self.keys.include?(RAILS_ENV) ? RAILS_ENV : RAILS_ENV.to_sym
         self.deep_update self[rails_env] if self[rails_env]

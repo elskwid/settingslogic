@@ -68,7 +68,11 @@ class TestSetting < Test::Unit::TestCase
       assert_equal 3000, settings4.default.port
       assert_equal 3001, settings4.port
       assert_equal "default name", settings4.name
-      
+    end
+  end
+  
+  def test_default_nested_settings_merge
+    in_test_environment do
       # test for 'defaults'
       settings5 = Settings.new(File.dirname(__FILE__) + '/application5.yml')
       assert_equal "default name", settings5.default.name

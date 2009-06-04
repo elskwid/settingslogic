@@ -43,6 +43,11 @@ module Settingslogic
       else
         raise ArgumentError.new("Your settings must be a hash, a symbol representing the name of the .yml file in your config directory, or a string representing the abosolute path to your settings file.")
       end
+      
+      # load defaults
+      default_key = ["defaults", :defaults, "default", :default].find{ |k| self.keys.include?(k) }
+      self.update self[default_key] if default_key
+      
       if defined?(RAILS_ENV)
         rails_env = self.keys.include?(RAILS_ENV) ? RAILS_ENV : RAILS_ENV.to_sym
         self.update self[rails_env] if self[rails_env]

@@ -63,6 +63,41 @@ Take note of the environment namespacing. If your framework supports environment
   >> Settings.awesome_setting
   => "Did you know 5 + 5 = 10?"
 
+== Defaults namespace
+
+"defaults" (or "default") is a special namespace. Settings in defaults will automatically be merged with any new settings under your specific environment. This gives you a nice way to set defaults for settings files that may need to be generated programatically without YAML variables.
+
+    defaults:
+      application:
+        name: my app
+        port: 3000
+
+    development:
+
+    production:
+      application:
+        port: 80
+
+  Would give you settings like this:
+  
+  >> RAILS_ENV
+  => "development"
+  
+  >> Settings.application.name
+  => "my app"
+  
+  >> Settings.application.port
+  => 3000
+  
+  >> RAILS_ENV
+  => "production"
+  
+  >> Settings.application.name
+  => "my app"
+  
+  >> Settings.application.port
+  => 80
+  
 == Multiple settings
 
   settings1 = Settings.new(:settings1) # looks for config/settings1.yml
